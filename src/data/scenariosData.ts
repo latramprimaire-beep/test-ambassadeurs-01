@@ -1,252 +1,878 @@
-import type { Scenario } from '../utils/gameLogic';
+import playgroundImg from '../assets/images/cour_recre_fr_1792242367600.jpg';
+import cafeteriaImg from '../assets/images/cantine_scolaire_fr_1792242367491.jpg';
+import cyberChatImg from '../assets/images/cyber_chat_fr_1792242367321.jpg';
 
-import playgroundImg from '../assets/images/scene_cour_recre_1792239397134.jpg';
-import cafeteriaImg from '../assets/images/scene_cantine_scolaire_1792239397492.jpg';
-import cyberChatImg from '../assets/images/scene_cyber_chat_1792239398317.jpg';
+export interface StoryChoice {
+  id: string;
+  text: string;
+  isBestChoice: boolean;
+  score: number;
+  badgeTag: string;
+  feedbackTitle: string;
+  feedbackText: string;
+  consequenceText: string;
+}
 
-export const SCENARIOS: Scenario[] = [
+export interface StoryStep {
+  stepNumber: number; // 1 à 5
+  stepTitle: string;
+  location: string;
+  storyText: string;
+  question: string;
+  choices: StoryChoice[];
+}
+
+export interface StoryMission {
+  id: string;
+  title: string;
+  location: string;
+  victimName: string;
+  theme: 'exclusion' | 'moqueries' | 'cyberharcelement' | 'rumeur';
+  summary: string;
+  imagePath: string;
+  goldenRule: string;
+  steps: StoryStep[];
+}
+
+export const STORY_MISSIONS: StoryMission[] = [
   {
     id: 'cour-de-recre',
-    title: 'La cour de récréation : Le ballon confisqué',
-    location: 'Sous le préau de l\'école',
+    title: 'Mission 1 · La cour de récréation : L\'histoire de Lucas',
+    location: 'Sous le préau de l\'école élémentaire',
     victimName: 'Lucas (CM1)',
     theme: 'exclusion',
-    summary: 'Lucas se fait exclure du jeu de football et confisquer sa casquette de manière répétée.',
-    contextText: `Tu es dans la cour pendant la récréation de l'après-midi. Près du préau, tu aperçois Lucas, assis seul sur un banc. Un groupe de trois élèves s'approche de lui. Maxime lui arrache sa casquette en criant : « Tu ne joues pas au foot avec nous, t'es trop nul et t'as pas le droit ! ». 
-
-Les autres élèves ricanent et se passent la casquette au-dessus de sa tête. Lucas tente de la récupérer, il rougit et semble sur le point de pleurer. C'est déjà la quatrième fois cette semaine que ce groupe s'en prend à lui.`,
-    distressSignals: [
-      'Lucas a la tête baissée et les yeux embués de larmes',
-      'Il est seul et isolé sur le banc à chaque récréation',
-      'Le groupe de trois élèves agit de façon répétée cette semaine',
-      'Il n\'arrive pas à se défendre seul face à trois camarades'
-    ],
+    summary: 'Lucas subit des moqueries répétées et le vol de sa casquette dans la cour.',
     imagePath: playgroundImg,
-    choices: [
+    goldenRule: 'Dans 80% des cas, le harcèlement scolaire cesse dans la minute quand un camarade témoin intervient calmement ou alerte un adulte !',
+    steps: [
       {
-        id: 'c1-empathy',
-        text: 'Aller voir Lucas, lui proposer de venir jouer avec toi et aller ensemble voir la maîtresse de surveillance pour récupérer sa casquette.',
-        isBestChoice: true,
-        score: 25,
-        badgeTag: 'Allié Protecteur',
-        feedbackTitle: 'Bravo ! C\'est le réflexe d\'un vrai Ambassadeur !',
-        feedbackText: 'En brisant l\'isolement de Lucas et en faisant intervenir un adulte de surveillance, tu désamorces la situation sans violence. Les agresseurs perdent leur pouvoir quand le groupe refuse d\'être complice.',
-        impactExplanation: 'Lucas retrouve le sourire et se sent en sécurité. La maîtresse a pu intervenir calmement et rappeler les règles de respect.',
-        distressCluesIdentified: [
-          'Tu as repéré l\'isolement de Lucas',
-          'Tu as compris que la répétition rendait la situation insupportable',
-          'Tu as alerté un adulte responsable sans agressivité'
+        stepNumber: 1,
+        stepTitle: 'Étape 1 : Le début de la récréation',
+        location: 'Près du banc de la cour',
+        storyText: `La cloche de 15h sonne. Les élèves se précipitent dans la cour pour jouer. Tu aperçois Lucas qui s'assoit seul sur un banc en bois. Il sort sa balle de tennis de sa poche.
+Aussitôt, Maxime et deux de ses copains arrivent d'un pas rapide, se plantent devant lui les bras croisés, et lui lancent avec mépris : « Rentre ta balle Lucas, tu joues pas avec nous, t'es trop nul et t'as pas le droit ! ».`,
+        question: 'Tu es à quelques mètres et tu assistes à cette première scène. Quelle est ta réaction immédiate ?',
+        choices: [
+          {
+            id: 'm1-s1-good',
+            text: 'T\'approcher calmement et dire : « Pourquoi vous lui parlez comme ça ? La cour appartient à tout le monde ! »',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Voix du Courage',
+            feedbackTitle: 'Excellente prise de parole immédiate !',
+            feedbackText: 'En intervenant dès les premiers mots méchants, tu montres tout de suite à Maxime que son comportement ne sera pas toléré en silence.',
+            consequenceText: 'Maxime s\'arrête net, surpris que quelqu\'un ose contester son autorité devant les autres.'
+          },
+          {
+            id: 'm1-s1-passive',
+            text: 'Détourner le regard et partir jouer ailleurs pour ne pas te faire remarquer par le groupe.',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Silence Évitant',
+            feedbackTitle: 'Attention au silence : il donne du pouvoir aux agresseurs.',
+            feedbackText: 'Quand personne ne réagit, le groupe se sent fort et libre de continuer son attaque.',
+            consequenceText: 'Voyant que personne ne s\'interpose, Maxime passe à l\'étape supérieure...'
+          },
+          {
+            id: 'm1-s1-aggressive',
+            text: 'Insulter Maxime en lui disant : « C\'est toi le gros nul dégage de là ! »',
+            isBestChoice: false,
+            score: 4,
+            badgeTag: 'Colère Impulsive',
+            feedbackTitle: 'L\'agressivité entraîne l\'escalade.',
+            feedbackText: 'Répondre par des insultes fait monter la tension et risque de déclencher une bagarre générale dans la cour.',
+            consequenceText: 'Les copains de Maxime s\'énervent et la dispute devient violente.'
+          }
         ]
       },
       {
-        id: 'c1-passive',
-        text: 'Regarder la scène de loin et rigoler discrètement avec tes copains pour ne pas te faire remarquer par Maxime.',
-        isBestChoice: false,
-        score: 5,
-        badgeTag: 'Témoin Passif',
-        feedbackTitle: 'Attention au piège du témoin passif !',
-        feedbackText: 'Quand on rigole ou qu\'on ne dit rien, les agresseurs pensent qu\'on est d\'accord avec eux. Le silence des témoins renforce leur sentiment d\'impunité et augmente la tristesse de Lucas qui se sent abandonné de tous.',
-        impactExplanation: 'Lucas pense que toute la classe est contre lui. La situation risque de recommencer dès demain.',
-        distressCluesIdentified: [
-          'Le silence et les rires font le jeu du harcèlement',
-          'Un témoin passif encourage sans le vouloir les moqueries'
+        stepNumber: 2,
+        stepTitle: 'Étape 2 : L\'escalade et la provocation',
+        location: 'Sous le préau',
+        storyText: `L'ambiance devient pesante. Maxime sourit d'un air narquois et arrache brusquement la casquette de Lucas d'un coup sec.
+Il la jette en l'air à ses deux complices qui se la passent au-dessus de la tête de Lucas comme une balle de passe-à-dix. Lucas court de l'un à l'autre en sautillant pour essayer de l'attraper, rouge de honte, les larmes aux yeux. Des élèves autour s'arrêtent et commencent à regarder la scène.`,
+        question: 'Le jeu humiliant attire du monde. Que fais-tu maintenant ?',
+        choices: [
+          {
+            id: 'm1-s2-good',
+            text: 'Te placer aux côtés de Lucas, lui poser une main réconfortante sur l\'épaule et dire au groupe : « Rendez-lui sa casquette, ce n\'est pas un jeu ! »',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Bouclier Humain',
+            feedbackTitle: 'Bravo ! Tu brises l\'isolement physique de Lucas !',
+            feedbackText: 'Être deux désamorce le sentiment d\'abandon de la victime. Lucas ne se sent plus seul face à la meute.',
+            consequenceText: 'Lucas reprend son souffle et sent qu\'il a un allié précieux à ses côtés.'
+          },
+          {
+            id: 'm1-s2-laugh',
+            text: 'Rigoler avec les autres élèves spectateurs pour faire comme tout le monde.',
+            isBestChoice: false,
+            score: 0,
+            badgeTag: 'Complice Spectateur',
+            feedbackTitle: 'Rire de l\'humiliation, c\'est participer au harcèlement !',
+            feedbackText: 'Pour la victime, le rire des spectateurs fait encore plus mal que le geste de l\'agresseur.',
+            consequenceText: 'Lucas s\'effondre moralement, croyant que tout le monde se réjouit de son malheur.'
+          },
+          {
+            id: 'm1-s2-passive',
+            text: 'Attendre en espérant que la sonnerie retentisse vite pour mettre fin à l\'histoire.',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Attentisme',
+            feedbackTitle: 'Le temps paraît interminable pour celui qui souffre.',
+            feedbackText: 'Chaque minute de passivité est une souffrance supplémentaire pour Lucas.',
+            consequenceText: 'Les trois élèves continuent et menacent de jeter sa casquette sur le toit.'
+          }
         ]
       },
       {
-        id: 'c1-aggressive',
-        text: 'Courir vers Maxime en hurlant des insultes et le pousser par terre pour lui arracher la casquette.',
-        isBestChoice: false,
-        score: 10,
-        badgeTag: 'Réaction Impulsive',
-        feedbackTitle: 'La violence ne résout jamais la violence !',
-        feedbackText: 'Même si ton intention de protéger Lucas est généreuse, répondre par des coups ou des insultes crée une bagarre générale. Tu risques d\'être puni à ton tour et de compliquer la situation.',
-        impactExplanation: 'La maîtresse arrive en entendant les cris et sépare la dispute. Lucas est encore plus effrayé par l\'escalade de violence.',
-        distressCluesIdentified: [
-          'L\'agressivité physique ne protège pas durablement la victime',
-          'La bonne force d\'un ambassadeur réside dans le calme et l\'alerte d\'un adulte'
+        stepNumber: 3,
+        stepTitle: 'Étape 3 : Le piège de l\'isolement',
+        location: 'Près des marronniers',
+        storyText: `Maxime ne lâche rien : « Si tu la veux, viens la chercher dans la boue ! ». Lucas est coincé contre le tronc d'un arbre, il baisse les bras et ne cherche même plus à courir. Il tremble.
+Deux autres élèves de la classe s'approchent et te murmurent : « Laisse tomber, si tu t'en mêles, Maxime va nous embêter nous aussi demain... ». C'est la peur des représailles qui paralyse tout le monde.`,
+        question: 'Tes camarades te conseillent de laisser tomber par peur. Quel choix fais-tu ?',
+        choices: [
+          {
+            id: 'm1-s3-good',
+            text: 'Leur répondre : « Si on est plusieurs à dire non, il ne pourra rien faire ! Venez avec moi, on va voir la maîtresse de surveillance ensemble ! »',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Leader Bienveillant',
+            feedbackTitle: 'Magnifique réflexe d\'union collective !',
+            feedbackText: 'La solidarité transforme la peur en force. Quand les témoins s\'unissent, les agresseurs perdent tout leur ascendant.',
+            consequenceText: 'Tes deux camarades reprennent courage et décident de t\'accompagner !'
+          },
+          {
+            id: 'm1-s3-fear',
+            text: 'Écouter tes copains, avoir peur d\'être la prochaine cible et reculer.',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Peur Contagieuse',
+            feedbackTitle: 'La peur est normale, mais elle protège le harceleur.',
+            feedbackText: 'Si tout le monde recule, personne n\'est à l\'abri d\'être la prochaine victime.',
+            consequenceText: 'Lucas perd tout espoir et s\'assoit par terre en larmes.'
+          },
+          {
+            id: 'm1-s3-mock',
+            text: 'Crier sur tes copains : « Vous êtes des lâches et des trouillards ! »',
+            isBestChoice: false,
+            score: 3,
+            badgeTag: 'Jugement Agressif',
+            feedbackTitle: 'Juger les autres ne crée pas de solidarité.',
+            feedbackText: 'Pour rallier ses camarades, il faut les encourager avec bienveillance, pas les rabaisser.',
+            consequenceText: 'Tes amis se vexent et s\'en vont, te laissant seul.'
+          }
+        ]
+      },
+      {
+        stepNumber: 4,
+        stepTitle: 'Étape 4 : L\'intervention de l\'adulte responsable',
+        location: 'Devant la maîtresse de surveillance',
+        storyText: `Tu décides d'agir. Tu t'approches de la maîtresse de surveillance avec Lucas et tes amis. La maîtresse voit que vous arrivez en groupe et demande calmement : « Que se passe-t-il les enfants ? ».
+Maxime, voyant que vous parlez à la maîtresse, te lance un regard noir depuis le préau et te chuchote de loin : « T'es qu'une balance ! ».`,
+        question: 'Comment t\'exprimes-tu auprès de la maîtresse pour expliquer la situation sans intimidation ?',
+        choices: [
+          {
+            id: 'm1-s4-good',
+            text: 'Expliquer clairement : « Maîtresse, Maxime a confisqué la casquette de Lucas et se moque de lui depuis plusieurs jours. Lucas est triste et on a besoin de votre aide pour que ça cesse. »',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Alerteur Citoyen',
+            feedbackTitle: 'Formulation parfaite : factuelle et protectrice !',
+            feedbackText: 'Alerter pour secourir un camarade n\'est pas cafarder. Tu décris les faits sans haine pour rétablir la justice et la sécurité.',
+            consequenceText: 'La maîtresse comprend tout de suite la gravité et se dirige vers Maxime pour récupérer la casquette.'
+          },
+          {
+            id: 'm1-s4-hesitate',
+            text: 'Avoir honte du mot "balance", baisser les yeux et bafouiller : « Euh... rien en fait, c\'est juste un petit jeu... »',
+            isBestChoice: false,
+            score: 1,
+            badgeTag: 'Piège du Cafardage',
+            feedbackTitle: 'Le mot "balance" est une arme manipulatrice des agresseurs !',
+            feedbackText: 'Les harceleurs utilisent ce mot pour faire taire les témoins. Protéger quelqu\'un est un acte noble.',
+            consequenceText: 'La maîtresse repart et Lucas reste sans défense.'
+          },
+          {
+            id: 'm1-s4-punish',
+            text: 'Crier : « Maîtresse, punissez Maxime pour toujours, collez-lui deux heures de colle ! »',
+            isBestChoice: false,
+            score: 4,
+            badgeTag: 'Désir de Vengeance',
+            feedbackTitle: 'Ce n\'est pas aux élèves de décider des punitions.',
+            feedbackText: 'L\'adulte est là pour enquêter, écouter et sanctionner selon le règlement scolaire.',
+            consequenceText: 'La maîtresse te demande de baisser d\'un ton pour comprendre calmement.'
+          }
+        ]
+      },
+      {
+        stepNumber: 5,
+        stepTitle: 'Étape 5 : Le bilan et la nouvelle récréation',
+        location: 'La cour apaisée',
+        storyText: `La maîtresse est intervenue avec fermeté et écoute. Elle a récupéré la casquette de Lucas, a pris Maxime et ses copains à part pour un rappel à la loi et une convocation avec la directrice.
+Lucas a retrouvé le sourire. La cloche de fin de récréation sonne. Demain, une nouvelle récréation commencera.`,
+        question: 'Quel geste d\'Ambassadeur de la Bienveillance fais-tu pour consolider la paix durablement ?',
+        choices: [
+          {
+            id: 'm1-s5-good',
+            text: 'Proposer à Lucas de monter en rang ensemble et convenir de faire une partie de ballon tous ensemble dès demain midi.',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Bâtisseur d\'Amitié',
+            feedbackTitle: 'Victoire totale ! Lucas est désormais intégré et protégé !',
+            feedbackText: 'La meilleure arme contre le harcèlement est l\'inclusion active et la création de liens d\'amitié durables.',
+            consequenceText: 'Lucas se sent enfin aimé et respecté dans sa classe. Mission 1 accomplie avec brio !'
+          },
+          {
+            id: 'm1-s5-brag',
+            text: 'Aller narguer Maxime en disant : « Bien fait pour toi, t\'es puni ! »',
+            isBestChoice: false,
+            score: 1,
+            badgeTag: 'Rancœur Nuisible',
+            feedbackTitle: 'La moquerie inversée ne guérit rien.',
+            feedbackText: 'Narguer l\'agresseur puni entretient la rancœur et risque de créer de nouveaux conflits plus tard.',
+            consequenceText: 'Maxime rumine sa vengeance au lieu de réfléchir à sa faute.'
+          },
+          {
+            id: 'm1-s5-forget',
+            text: 'Repartir seul sans un mot à Lucas maintenant que la maîtresse a géré.',
+            isBestChoice: false,
+            score: 3,
+            badgeTag: 'Aide Ponctuelle',
+            feedbackTitle: 'L\'amitié se construit sur la durée.',
+            feedbackText: 'Une parole amicale après l\'orage ancre définitivement la sécurité affective de Lucas.',
+            consequenceText: 'Lucas est soulagé, mais il hésite encore à s\'ouvrir aux autres.'
+          }
         ]
       }
     ]
   },
   {
     id: 'cantine-scolaire',
-    title: 'La cantine : Le plateau bousculé et les chuchotements',
-    location: 'Au réfectoire scolaire',
+    title: 'Mission 2 · La cantine : Le déjeuner de Sarah',
+    location: 'Au réfectoire de l\'école élémentaire',
     victimName: 'Sarah (CM2)',
     theme: 'moqueries',
-    summary: 'Sarah est la cible de moqueries sur son apparence et d\'un geste délibéré pour renverser son repas.',
-    contextText: `C'est l'heure du déjeuner à la cantine. Sarah s'assoit au bout d'une table avec son plateau. Deux élèves de sa classe s'assoient juste en face et commencent à chuchoter en la regardant, en pouffant de rire. L'une d'elles imite sa façon de manger et se moque de ses lunettes.
-
-Quand Sarah se lève pour remplir la carafe d'eau, un des élèves allonge sa jambe et donne un coup de coude dans son plateau. Son pot de compote tombe par terre et s'écrase. Toute la table éclate de rire. Sarah rougit violemment, regarde ses chaussures et n'ose rien dire par honte.`,
-    distressSignals: [
-      'Sarah est ciblée par des moqueries répétées sur son physique',
-      'Le geste de faire tomber le plateau est volontaire mais maquillé en accident',
-      'Elle n\'ose pas appeler à l\'aide par honte d\'attirer l\'attention',
-      'Les rires des autres amplifient son humiliation publique'
-    ],
+    summary: 'Sarah est la cible de moqueries sur son apparence et d\'un plateau bousculé à la cantine.',
     imagePath: cafeteriaImg,
-    choices: [
+    goldenRule: 'Un mot gentil et un accueil à sa table désarment instantanément l\'humiliation publique !',
+    steps: [
       {
-        id: 'c2-empathy',
-        text: 'T\'approcher de Sarah, l\'aider à ramasser la compote, lui dire « Ne fais pas attention à eux » et prévenir gentiment l\'animateur de cantine.',
-        isBestChoice: true,
-        score: 25,
-        badgeTag: 'Bouclier Bienveillant',
-        feedbackTitle: 'Excellent réflexe de solidarité !',
-        feedbackText: 'En apportant une aide concrète et des paroles réconfortantes, tu montres à Sarah qu\'elle n\'est pas seule. Prévenir l\'animateur de la cantine permet de rétablir la justice sans que Sarah n\'ait à porter toute la charge de l\'alerte.',
-        impactExplanation: 'L\'animateur nettoie avec Sarah, prend à part les élèves moqueurs et rappelle que la cantine est un lieu de convivialité pour tous.',
-        distressCluesIdentified: [
-          'Tu as identifié la détresse silencieuse et la honte de la victime',
-          'Un geste simple de solidarité désarme l\'effet d\'humiliation publique'
+        stepNumber: 1,
+        stepTitle: 'Étape 1 : L\'entrée au réfectoire',
+        location: 'La file du self',
+        storyText: `C'est midi et demi. L'odeur du pain chaud et des légumes emplit le réfectoire. Sarah prend son plateau orange et s'avance dans la file. Deux filles de sa classe se penchent l'une vers l'autre en la regardant de haut en bas, en gloussant derrière leur main : « Regarde ses chaussures déchirées et ses lunettes de grand-mère... trop la honte ». Sarah baisse les yeux et serre son plateau contre elle.`,
+        question: 'Tu es juste derrière Sarah dans la file. Comment réagis-tu ?',
+        choices: [
+          {
+            id: 'm2-s1-good',
+            text: 'Parler joyeusement à Sarah : « Salut Sarah ! Tu as vu le menu aujourd\'hui ? Tu veux qu\'on mange ensemble ? »',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Accueil Chaleureux',
+            feedbackTitle: 'Un bouclier de gentillesse immédiat !',
+            feedbackText: 'En engageant la conversation positivement, tu coupes court aux chuchotements méchants et tu montres à Sarah qu\'elle a de la valeur.',
+            consequenceText: 'Sarah relève la tête avec un grand sourire, soulagée d\'avoir quelqu\'un avec qui parler.'
+          },
+          {
+            id: 'm2-s1-passive',
+            text: 'Faire comme si tu n\'avais rien entendu et regarder le menu sur le tableau.',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Indifférence',
+            feedbackTitle: 'Le silence valide les médisances.',
+            feedbackText: 'Sarah se sent observée et jugée par toute la file d\'attente.',
+            consequenceText: 'Les deux filles continuent leurs ricanements en s\'asseyant à une table.'
+          },
+          {
+            id: 'm2-s1-judge',
+            text: 'Regarder discrètement les chaussures de Sarah pour voir si elles sont vraiment abîmées.',
+            isBestChoice: false,
+            score: 0,
+            badgeTag: 'Curiosité Malplacée',
+            feedbackTitle: 'Ne participe pas à l\'examen humiliant.',
+            feedbackText: 'L\'apparence des autres ne regarde personne : chacun s\'habille comme il peut et a droit au respect absolu.',
+            consequenceText: 'Sarah voit ton regard et rougit encore plus.'
+          }
         ]
       },
       {
-        id: 'c2-passive',
-        text: 'Regarder fixement ton assiette en te disant : « Ce ne sont pas mes affaires, je ne veux pas d\'ennuis avec les deux élèves ». ',
-        isBestChoice: false,
-        score: 5,
-        badgeTag: 'Regard Évitant',
-        feedbackTitle: 'Ne pas voir, c\'est laisser faire !',
-        feedbackText: 'La peur de représailles est naturelle, mais le silence laisse la victime totalement désemparée. À l\'école, porter secours à un camarade en détresse est le rôle de chacun.',
-        impactExplanation: 'Sarah quitte la cantine sans avoir mangé son dessert et va s\'enfermer dans les toilettes pour pleurer.',
-        distressCluesIdentified: [
-          'L\'indifférence isole davantage la personne en souffrance'
+        stepNumber: 2,
+        stepTitle: 'Étape 2 : Le plateau renversé',
+        location: 'Entre deux tables de cantine',
+        storyText: `Sarah s'assoit au bout d'une table. Les deux filles viennent s'asseoir juste en face. Alors que Sarah se lève pour aller chercher une carafe d'eau, un élève allonge sa jambe sous la table et heurte délibérément son genou.
+Le plateau bascule : le verre d'eau vole, la soupe se renverse et son assiette s'écrase sur le sol avec un bruit sourd. Toute la salle de cantine s'arrête de parler. Des rires éclatent. Sarah est tétanisée au milieu du réfectoire.`,
+        question: 'Tous les regards sont braqués sur Sarah. Quelle est ton action immédiate ?',
+        choices: [
+          {
+            id: 'm2-s2-good',
+            text: 'Te lever immédiatement, aller vers Sarah, l\'aider à ramasser et dire fort : « Arrêtez de rire, ce n\'est pas drôle, son plateau a été poussé exprès ! »',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Défenseur Spontané',
+            feedbackTitle: 'Formidable courage devant toute la cantine !',
+            feedbackText: 'Prendre la parole devant un groupe de spectateurs désarme l\'humiliation collective et remet les rieurs face à leur bêtise.',
+            consequenceText: 'Les rires s\'éteignent immédiatement. Les élèves prennent conscience de la méchanceté du geste.'
+          },
+          {
+            id: 'm2-s2-laugh',
+            text: 'Rigoler avec tes voisins en disant : « Quel strike ! »',
+            isBestChoice: false,
+            score: 0,
+            badgeTag: 'Humiliation Amplifiée',
+            feedbackTitle: 'Cruauté inacceptable !',
+            feedbackText: 'Transformer le malheur d\'un camarade en spectacle est une blessure morale dévastatrice.',
+            consequenceText: 'Sarah s\'effondre et commence à pleurer au milieu des débris.'
+          },
+          {
+            id: 'm2-s2-freeze',
+            text: 'Rester assis sans bouger de peur de renverser ton propre verre.',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Tétanie',
+            feedbackTitle: 'La surprise paralyse, mais Sarah a besoin d\'aide.',
+            feedbackText: 'Quand un accident ou une injustice arrive, le premier qui bouge pour aider sauve la situation.',
+            consequenceText: 'Sarah reste seule de longues secondes au milieu du sol mouillé.'
+          }
         ]
       },
       {
-        id: 'c2-blame',
-        text: 'Dire à Sarah : « Bah alors Sarah, t\'es maladroite ! Fais attention la prochaine fois ! »',
-        isBestChoice: false,
-        score: 5,
-        badgeTag: 'Inversion des rôles',
-        feedbackTitle: 'Attention à ne pas culpabiliser la victime !',
-        feedbackText: 'Sarah n\'est pas maladroite : son plateau a été bousculé intentionnellement ! Lui faire des reproches, c\'est renverser la responsabilité et lui faire croire que c\'est de sa faute.',
-        impactExplanation: 'Sarah se sent coupable d\'une injustice subie, ce qui détruit encore plus sa confiance en elle.',
-        distressCluesIdentified: [
-          'La victime n\'est JAMAIS responsable des attaques qu\'elle subit'
+        stepNumber: 3,
+        stepTitle: 'Étape 3 : L\'arrivée de l\'animateur',
+        location: 'Au milieu de la cantine',
+        storyText: `L'animateur de cantine, alerté par le bruit de vaisselle cassée, arrive avec une serpillère et un balai.
+Les deux élèves moqueuses s'empressent de dire d'un ton innocent : « C'est pas nous monsieur, c'est Sarah qui est super maladroite, elle ne regarde jamais où elle marche ! ». Sarah n'ose pas contredire par peur de représailles.`,
+        question: 'L\'animateur regarde Sarah d\'un air perplexe. Comment rétablis-tu la vérité ?',
+        choices: [
+          {
+            id: 'm2-s3-good',
+            text: 'Expliquer calmement à l\'animateur : « Monsieur, ce n\'est pas de la maladresse. J\'ai vu la jambe allongée exprès pour faire tomber son plateau, et les moqueries durent depuis la file d\'attente. »',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Témoin de Vérité',
+            feedbackTitle: 'Rétablissement parfait de la vérité !',
+            feedbackText: 'Un témoignage précis et posé permet à l\'adulte de comprendre le piège tendu à la victime sans se laisser berner par les coupables.',
+            consequenceText: 'L\'animateur fronce les sourcils, prend les deux élèves à part et demande un nouveau plateau pour Sarah.'
+          },
+          {
+            id: 'm2-s3-silent',
+            text: 'Te taire et laisser l\'animateur gronder Sarah pour sa maladresse.',
+            isBestChoice: false,
+            score: 1,
+            badgeTag: 'Injustice Tolérée',
+            feedbackTitle: 'Laisser punir un innocent est insupportable.',
+            feedbackText: 'Quand un témoin se tait, l\'injustice triomphe et la victime perd toute confiance envers les adultes.',
+            consequenceText: 'Sarah ramasse seule sous les reproches injustes.'
+          },
+          {
+            id: 'm2-s3-shout',
+            text: 'Hurler sur les deux filles : « Espèces de menteuses, vous êtes des pestes ! »',
+            isBestChoice: false,
+            score: 3,
+            badgeTag: 'Emportement',
+            feedbackTitle: 'L\'énervement brouille ton message.',
+            feedbackText: 'L\'animateur risque de te recadrer pour les insultes au lieu d\'écouter ton explication.',
+            consequenceText: 'La situation devient confuse pour l\'adulte qui ne sait plus qui croire.'
+          }
+        ]
+      },
+      {
+        stepNumber: 4,
+        stepTitle: 'Étape 4 : Le réconfort et le repas partagé',
+        location: 'À une table chaleureuse',
+        storyText: `L'animateur a changé Sarah de table et a demandé aux élèves responsables de nettoyer avec lui.
+Sarah a un nouveau plateau tout chaud, mais elle reste assise avec les yeux rouges, sans appétit, les mains tremblotantes sur ses genoux. Le repas va bientôt se terminer.`,
+        question: 'Comment l\'aides-tu à retrouver son appétit et son sourire ?',
+        choices: [
+          {
+            id: 'm2-s4-good',
+            text: 'T\'asseoir à côté d\'elle, lui couper un morceau de pain en souriant et lui parler de votre matière préférée pour la changer les idées.',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Cœur Bienveillant',
+            feedbackTitle: 'C\'est l\'essence même de la bienveillance !',
+            feedbackText: 'Un geste d\'attention simple et une écoute douce apaisent le choc émotionnel. Sarah peut enfin souffler et manger son repas.',
+            consequenceText: 'Sarah esquisse un sourire et commence à manger son déjeuner dans le calme.'
+          },
+          {
+            id: 'm2-s4-quiz',
+            text: 'Lui poser des dizaines de questions sur pourquoi elle se laisse faire par les autres.',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Interrogatoire',
+            feedbackTitle: 'Ce n\'est pas le moment de poser des questions insistantes.',
+            feedbackText: 'Sarah a besoin de réconfort et de calme, pas d\'un interrogatoire qui la met mal à l\'aise.',
+            consequenceText: 'Sarah se referme sur elle-même.'
+          },
+          {
+            id: 'm2-s4-leave',
+            text: 'Partir débarrasser ton plateau sans un mot car tu as fini de manger.',
+            isBestChoice: false,
+            score: 3,
+            badgeTag: 'Départ Précipité',
+            feedbackTitle: 'Accompagne ton geste jusqu\'au bout.',
+            feedbackText: 'Rester avec elle jusqu\'à la sonnerie scelle un sentiment de sécurité totale.',
+            consequenceText: 'Sarah se retrouve à nouveau seule pour finir son repas.'
+          }
+        ]
+      },
+      {
+        stepNumber: 5,
+        stepTitle: 'Étape 5 : La charte du réfectoire',
+        location: 'La cour après le repas',
+        storyText: `En sortant de la cantine, l'animateur te remercie pour ton attitude exemplaire et informe l'enseignante de CM2 de l'incident. L'après-midi, la maîtresse décide d'ouvrir un échange de 10 minutes sur le respect et le vivre-ensemble à la cantine.`,
+        question: 'Quelle proposition fais-tu pour que la cantine reste un lieu agréable pour tous ?',
+        choices: [
+          {
+            id: 'm2-s5-good',
+            text: 'Proposer de créer une table d\'accueil bienveillante où chaque élève isolé peut s\'asseoir avec des ambassadeurs volontaires.',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Ambassadeur Inspirant',
+            feedbackTitle: 'Idée remarquable ! Un projet concret pour toute l\'école !',
+            feedbackText: 'Cette idée élimine la peur d\'être seul à table et transforme la cantine en lieu d\'amitié pour tous.',
+            consequenceText: 'Toute la classe et la maîtresse applaudissent l\'initiative. Mission 2 réussie !'
+          },
+          {
+            id: 'm2-s5-punitive',
+            text: 'Demander à ce que les deux filles mangent par terre dans un coin.',
+            isBestChoice: false,
+            score: 0,
+            badgeTag: 'Punition Vindicative',
+            feedbackTitle: 'L\'humiliation ne doit jamais être la réponse.',
+            feedbackText: 'L\'école doit éduquer au respect, jamais humilier en retour.',
+            consequenceText: 'La maîtresse rappelle que la justice se fait dans le respect des personnes.'
+          },
+          {
+            id: 'm2-s5-nothing',
+            text: 'Ne rien proposer et attendre que la récréation sonne.',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Passivité Post-Crise',
+            feedbackTitle: 'Partager ses idées rend toute la classe meilleure.',
+            feedbackText: 'La voix d\'un ambassadeur inspire ses camarades.',
+            consequenceText: 'La séance se termine sans idée nouvelle pour améliorer le quotidien.'
+          }
         ]
       }
     ]
   },
   {
     id: 'cyber-groupe',
-    title: 'Le groupe en ligne : La photo détournée et les emojis moqueurs',
-    location: 'Sur le tchat de messagerie de la classe',
+    title: 'Mission 3 · Le groupe en ligne : Le message de Thomas',
+    location: 'Sur la tablette de messagerie de la classe',
     victimName: 'Thomas (CM2)',
     theme: 'cyberharcelement',
-    summary: 'Une photo compromettante de Thomas est diffusée sur le groupe de classe avec des moqueries en chaîne.',
-    contextText: `Le soir, tu ouvres la messagerie sur ta tablette. Sur le groupe créé par des élèves de la classe pour discuter des devoirs et des jeux vidéo, un élève vient de publier une photo de Thomas prise en cachette pendant la gym où il a trébuché dans les haies. 
-
-La photo a été gribouillée avec des inscriptions méchantes : « Le boulet de l'année ». Plusieurs élèves ont répondu avec des emojis de rire aux larmes et des commentaires : « Trop la honte », « Supprime ta vie ». Thomas a quitté le groupe sans répondre. Demain matin, il a cours avec tout le monde.`,
-    distressSignals: [
-      'Photo prise sans autorisation et diffusée publiquement',
-      'Effet de meute numérique : les moqueries continuent 24h/24 hors de l\'école',
-      'Thomas a quitté le groupe brusquement, signe de grand désarroi',
-      'La peur d\'affronter la classe le lendemain matin'
-    ],
+    summary: 'Une photo humiliante de Thomas est diffusée en ligne avec des commentaires cruels.',
     imagePath: cyberChatImg,
-    choices: [
+    goldenRule: 'Sur Internet : Ne like pas, ne partage pas, fais une capture d\'écran de preuve et alerte le 3018 !',
+    steps: [
       {
-        id: 'c3-empathy',
-        text: 'Écrire sur le groupe : « Stop, ce n\'est pas drôle du tout, supprimez cette photo ! », faire une capture d\'écran pour garder la preuve, envoyer un message de soutien à Thomas et en parler à tes parents.',
-        isBestChoice: true,
-        score: 25,
-        badgeTag: 'Sentinelle Numérique',
-        feedbackTitle: 'C\'est exactement la démarche exemplaire !',
-        feedbackText: 'Sur Internet, la règle d\'or est : refuser d\'alimenter la chaîne, manifester publiquement son désaccord pour stopper l\'effet de groupe, conserver des captures d\'écran de preuve et prévenir des adultes de confiance.',
-        impactExplanation: 'Grâce à ton message, d\'autres élèves silencieux osent dire qu\'ils sont d\'accord avec toi. La photo est retirée et l\'enseignant organise un échange le lendemain matin.',
-        distressCluesIdentified: [
-          'Garder les captures d\'écran comme preuve légale',
-          'Rompre la viralité en disant fermement stop',
-          'Soutenir en privé la personne ciblée'
+        stepNumber: 1,
+        stepTitle: 'Étape 1 : La notification du soir',
+        location: 'À la maison sur la tablette',
+        storyText: `Il est 19h30. Tu termines tes devoirs de français quand une notification vibre sur ta tablette. Sur le groupe de tchat créé par les élèves de la classe pour les exposés, un camarade vient d'envoyer une photo prise en cachette en cours de sport.
+On y voit Thomas, le pantalon déchiré après avoir trébuché sur une haie d'athlétisme. La photo a été gribouillée avec une flèche rouge et le mot : « Le gros boulet de l'année ».`,
+        question: 'Dès l\'apparition de ce message dans le groupe, quelle est ta première réaction ?',
+        choices: [
+          {
+            id: 'm3-s1-good',
+            text: 'Écrire immédiatement sur le tchat : « Ce n\'est pas drôle du tout, supprime cette photo tout de suite ! »',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Bouclier Numérique',
+            feedbackTitle: 'Excellente réaction immédiate !',
+            feedbackText: 'Sur Internet, la viralité se nourrit de l\'approbation ou du silence. Dire non publiquement stoppe net l\'élan moqueur.',
+            consequenceText: 'L\'élève qui a posté la photo hésite et commence à douter de sa blague.'
+          },
+          {
+            id: 'm3-s1-like',
+            text: 'Mettre un emoji "mort de rire" et transférer la photo à ton meilleur ami.',
+            isBestChoice: false,
+            score: 0,
+            badgeTag: 'Amplificateur Nuisible',
+            feedbackTitle: 'Grave erreur : relayer, c\'est harceler !',
+            feedbackText: 'Liker ou transférer une moquerie fait de toi un auteur légal de cyberharcèlement.',
+            consequenceText: 'La photo commence à circuler sur d\'autres téléphones.'
+          },
+          {
+            id: 'm3-s1-ignore',
+            text: 'Fermer l\'application sans rien écrire en te disant que ce n\'est pas tes affaires.',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Silence Écran',
+            feedbackTitle: 'Le silence en ligne encourage les attaques.',
+            feedbackText: 'Thomas voit que personne ne le défend et croit que toute la classe se moque de lui.',
+            consequenceText: 'D\'autres élèves commencent à envoyer des commentaires méchants.'
+          }
         ]
       },
       {
-        id: 'c3-share',
-        text: 'Mettre un emoji qui rigole et transférer l\'image à d\'autres copains qui ne sont pas dans le groupe.',
-        isBestChoice: false,
-        score: 0,
-        badgeTag: 'Complice du Cyberharcèlement',
-        feedbackTitle: 'Très dangereux : c\'est puni par la loi !',
-        feedbackText: 'Partager une photo humiliante ou y ajouter un emoji moqueur fait de toi un auteur de cyberharcèlement. Même mineur, la loi française interdit formellement la diffusion de contenus portant atteinte à la dignité d\'autrui.',
-        impactExplanation: 'La photo fait le tour de l\'école. Thomas a tellement d\'angoisse qu\'il refuse de manger et ne veut plus retourner à l\'école.',
-        distressCluesIdentified: [
-          'Liker ou retweeter / transférer une moquerie propage la violence',
-          'La responsabilité pénale commence aussi sur les écrans'
+        stepNumber: 2,
+        stepTitle: 'Étape 2 : L\'effet de meute numérique',
+        location: 'Le fil de discussion',
+        storyText: `Malgré tout, deux autres élèves ont renchéri avec des gifs humiliants et des messages : « T'es trop nul Thomas », « Cache-toi demain ».
+Soudain, une ligne grise apparaît sur l'écran : *« Thomas a quitté le groupe »*. Thomas ne répond plus aux messages et a coupé sa tablette. Demain matin, il doit affronter toute la classe à 8h30.`,
+        question: 'Thomas a quitté le groupe et semble désemparé. Que fais-tu ?',
+        choices: [
+          {
+            id: 'm3-s2-good',
+            text: 'Lui envoyer un message privé chaleureux : « Thomas, ne fais pas attention à ces bêtises, ce qu\'ils ont fait est nul. Je suis avec toi et on va régler ça demain ! »',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Lien Sauveur',
+            feedbackTitle: 'Geste salvateur de soutien privé !',
+            feedbackText: 'Recevoir un message d\'amitié au moment le plus sombre évite à la victime de sombrer dans le désespoir et l\'angoisse nocturne.',
+            consequenceText: 'Thomas lit ton message, respire un grand coup et se sent infiniment moins seul.'
+          },
+          {
+            id: 'm3-s2-leave',
+            text: 'Quitter le groupe toi aussi pour ne plus rien voir.',
+            isBestChoice: false,
+            score: 3,
+            badgeTag: 'Fuite Numérique',
+            feedbackTitle: 'Quitter le groupe te protège, mais n\'aide pas Thomas.',
+            feedbackText: 'Thomas reste seul face aux répercussions si aucun allié ne garde le contact.',
+            consequenceText: 'Les moqueries continuent sans témoin bienveillant.'
+          },
+          {
+            id: 'm3-s2-mock',
+            text: 'Écrire sur le groupe : « Bah alors Thomas, pourquoi tu rages et tu quittes ? »',
+            isBestChoice: false,
+            score: 0,
+            badgeTag: 'Cruauté Gratuite',
+            feedbackTitle: 'Culpabilisation cruelle.',
+            feedbackText: 'Reprocher à une victime d\'exprimer sa souffrance est indigne d\'un élève ambassadeur.',
+            consequenceText: 'Thomas passe une nuit blanche dans les larmes.'
+          }
         ]
       },
       {
-        id: 'c3-leave',
-        text: 'Quitter discrètement le groupe pour ne plus voir les messages sans rien dire à personne.',
-        isBestChoice: false,
-        score: 10,
-        badgeTag: 'Témoin Déconnecté',
-        feedbackTitle: 'Tu te protèges, mais Thomas reste seul face aux attaques.',
-        feedbackText: 'Quitter le groupe t\'évite de participer, ce qui est bien. Mais Thomas reste la cible de toute la meute numérique sans aucun allié. Un ambassadeur utilise sa voix pour alerter et soutenir.',
-        impactExplanation: 'Les messages continuent toute la nuit. Personne n\'a prévenu les adultes et Thomas arrive en pleurs le lendemain.',
-        distressCluesIdentified: [
-          'Le cyberharcèlement ne s\'arrête pas tout seul si personne n\'intervient'
+        stepNumber: 3,
+        stepTitle: 'Étape 3 : La sauvegarde de la preuve',
+        location: 'Gestion de l\'écran',
+        storyText: `Tu te rappelles les conseils de la formation sur le cyberharcèlement : les auteurs suppriment souvent leurs messages dès le lendemain pour faire comme s'il ne s'était rien passé et accuser la victime de mentir.`,
+        question: 'Quel geste technique capital dois-tu accomplir sur ta tablette dès maintenant ?',
+        choices: [
+          {
+            id: 'm3-s3-good',
+            text: 'Faire une capture d\'écran (screenshot) montrant bien la photo, les commentaires moqueurs, l\'heure et les prénoms des auteurs.',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Gardien des Preuves',
+            feedbackTitle: 'Le réflexe d\'or du numérique !',
+            feedbackText: 'La capture d\'écran est la preuve juridique irréfutable en cas de cyberharcèlement. Elle protège la parole de la victime.',
+            consequenceText: 'La preuve est enregistrée en sécurité dans tes photos.'
+          },
+          {
+            id: 'm3-s3-delete',
+            text: 'Supprimer toute la conversation pour faire disparaître la photo de tes yeux.',
+            isBestChoice: false,
+            score: 1,
+            badgeTag: 'Destruction de Preuve',
+            feedbackTitle: 'Erreur fréquente : supprimer détruit la preuve !',
+            feedbackText: 'Si tu supprimes le tchat, les adultes ne pourront pas voir qui a envoyé quoi et l\'agresseur niera.',
+            consequenceText: 'Il devient difficile de prouver ce qui a été dit.'
+          },
+          {
+            id: 'm3-s3-post',
+            text: 'Reposter la photo sur ton propre statut pour demander l\'avis de tout le monde.',
+            isBestChoice: false,
+            score: 0,
+            badgeTag: 'Sur-Diffusion',
+            feedbackTitle: 'Catastrophique ! Tu amplifies la diffusion !',
+            feedbackText: 'La rediffusion est une faute grave qui étend l\'humiliation à un public encore plus large.',
+            consequenceText: 'Toute l\'école voit la photo à cause de ce repost.'
+          }
+        ]
+      },
+      {
+        stepNumber: 4,
+        stepTitle: 'Étape 4 : L\'alerte aux adultes',
+        location: 'Le salon familial',
+        storyText: `Il est 20h. Tes parents sont dans le salon. Demain matin, Thomas risque de refuser d'aller à l'école par peur du regard des autres élèves. Tu as la capture d'écran dans ta tablette.`,
+        question: 'Comment passes-tu le relais aux adultes responsables ce soir ?',
+        choices: [
+          {
+            id: 'm3-s4-good',
+            text: 'Montrer la capture d\'écran à tes parents, leur expliquer la situation et leur demander d\'écrire un mot à l\'enseignant ou d\'appeler le 3018 si besoin.',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Sentinelle Responsable',
+            feedbackTitle: 'Parfait ! Tu confies la situation aux adultes protecteurs !',
+            feedbackText: 'Les adultes ont les moyens légaux et éducatifs pour intervenir dès l\'arrivée à l\'école et contacter les familles concernées.',
+            consequenceText: 'Tes parents te félicitent pour ta vigilance et préviennent l\'école par email ce soir même.'
+          },
+          {
+            id: 'm3-s4-keep',
+            text: 'Garder le secret pour ne pas inquiéter tes parents et attendre de voir ce qui se passe demain.',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Secret Risqué',
+            feedbackTitle: 'Les adultes doivent être prévenus le plus vite possible.',
+            feedbackText: 'Laisser passer la nuit sans intervention augmente le stress de Thomas qui ne dort pas.',
+            consequenceText: 'Thomas fait une crise d\'angoisse au réveil le matin.'
+          },
+          {
+            id: 'm3-s4-call',
+            text: 'Appeler l\'élève qui a posté la photo pour le menacer de lui casser la figure demain matin.',
+            isBestChoice: false,
+            score: 1,
+            badgeTag: 'Menace Nocturne',
+            feedbackTitle: 'Les menaces ne résolvent rien.',
+            feedbackText: 'En menaçant, tu te mets en tort et tu aggraves le conflit.',
+            consequenceText: 'La dispute s\'envenime entre les familles.'
+          }
+        ]
+      },
+      {
+        stepNumber: 5,
+        stepTitle: 'Étape 5 : L\'accueil du lendemain matin',
+        location: 'Devant la grille de l\'école à 8h20',
+        storyText: `Le lendemain matin, Thomas arrive devant la grille de l'école. Il a l'air fatigué, le regard inquiet, la capuche sur la tête, hésitant à franchir le portail.`,
+        question: 'Que fais-tu dès que tu aperçois Thomas arriver ?',
+        choices: [
+          {
+            id: 'm3-s5-good',
+            text: 'Aller vers lui d\'un pas amical, lui dire « Salut Thomas, viens avec nous ! », et entrer ensemble dans la cour comme une équipe soudée.',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Allié Exemplaire',
+            feedbackTitle: 'Mission accomplie avec éclat !',
+            feedbackText: 'Arriver aux côtés d\'amis dissout immédiatement l\'angoisse. Les moqueurs voient que Thomas n\'est pas une proie isolée.',
+            consequenceText: 'Thomas retrouve le sourire, l\'enseignant règle la situation en classe dans la matinée. Bravo !'
+          },
+          {
+            id: 'm3-s5-wait',
+            text: 'Attendre qu\'il vienne vers toi tout seul pour voir s\'il a envie de parler.',
+            isBestChoice: false,
+            score: 3,
+            badgeTag: 'Hésitation',
+            feedbackTitle: 'C\'est à l\'ambassadeur de faire le premier pas.',
+            feedbackText: 'Quand on a honte, on n\'ose pas aller vers les autres.',
+            consequenceText: 'Thomas reste quelques minutes hésitant près du trottoir.'
+          },
+          {
+            id: 'm3-s5-loud',
+            text: 'Crier devant tout le monde : « T\'inquiète Thomas, j\'ai montré la photo à mes parents ! »',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Manque de Tact',
+            feedbackTitle: 'Attention à la discrétion et au respect de sa pudeur.',
+            feedbackText: 'Crier le problème en public peut gêner Thomas devant ses camarades.',
+            consequenceText: 'Thomas baisse la tête, gêné par l\'attention de la foule.'
+          }
         ]
       }
     ]
   },
   {
     id: 'couloir-rumeurs',
-    title: 'Le couloir et les vestiaires : La rumeur venimeuse',
-    location: 'Dans le couloir devant la classe',
+    title: 'Mission 4 · Le couloir : La rumeur sur Emma',
+    location: 'Dans le couloir et les vestiaires de sport',
     victimName: 'Emma (CM1)',
     theme: 'rumeur',
-    summary: 'Une fausse rumeur se propage sur Emma, provoquant son isolement total et des maux de ventre.',
-    contextText: `Dans le couloir avant la sonnerie, Léa chuchote à un groupe d'élèves : « Vous savez quoi ? Emma a fouillé dans les cartables ce matin et elle vole les feutres des autres ! Et en plus elle sent bizarre ! ». Deux autres élèves répètent déjà la phrase à d'autres camarades.
-
-Depuis trois jours, personne ne veut s'asseoir à côté d'Emma en classe ni lui prêter de matériel. Emma reste collée au mur du couloir, la tête rentrée dans son blouson. Elle se tient le ventre à deux mains et a demandé deux fois dans la semaine d'aller à l'infirmerie pour des nausées.`,
-    distressSignals: [
-      'Propagation de fausses rumeurs calomnieuses',
-      'Mise en quarantaine / exclusion systématique de la classe',
-      'Signes physiques de détresse : maux de ventre récurrents (somatisation)',
-      'Emma cherche refuge à l\'infirmerie pour fuir le groupe'
-    ],
+    summary: 'Une rumeur calomnieuse isole Emma et provoque de violents maux de ventre.',
     imagePath: playgroundImg,
-    choices: [
+    goldenRule: 'Face à une rumeur : exige des faits, refuse de colporter et offre ta présence amicale !',
+    steps: [
       {
-        id: 'c4-empathy',
-        text: 'Dire aux élèves : « Arrêtez d\'inventer des choses fausses, c\'est méchant et injuste ». Proposer à Emma de vous asseoir ensemble en classe et lui demander comment elle va.',
-        isBestChoice: true,
-        score: 25,
-        badgeTag: 'Porteur de Vérité',
-        feedbackTitle: 'Magistral ! Tu brises la chaîne des rumeurs !',
-        feedbackText: 'Les rumeurs se nourrissent de la crédulité et de la répétition. En exigeant des faits et en refusant de relayer le mensonge, tu détruis la mécanique de rejet. Aller vers Emma dissipe immédiatement son sentiment d\'exclusion.',
-        impactExplanation: 'Emma ressent un immense soulagement. Les autres élèves se rendent compte de la bêtise de la rumeur et s\'excusent.',
-        distressCluesIdentified: [
-          'Comprendre que les maux de ventre sont un signal d\'alarme corporel face au stress',
-          'S\'opposer fermement aux rumeurs infondées',
-          'Rétablir le lien social en offrant sa présence amicale'
+        stepNumber: 1,
+        stepTitle: 'Étape 1 : Le ragot du matin',
+        location: 'Le couloir devant les porte-manteaux',
+        storyText: `À 8h25, dans le couloir avant la sonnerie, Léa chuchote à un groupe de trois camarades : « Vous savez quoi ? Emma a fouillé dans mon cartable hier et elle m'a volé mes feutres pailletés ! Et en plus elle sent bizarre ! ». Deux élèves répètent déjà la phrase à d'autres camarades qui hochent la tête sans vérifier.`,
+        question: 'Tu entends Léa colporter cette rumeur. Comment interviens-tu ?',
+        choices: [
+          {
+            id: 'm4-s1-good',
+            text: 'Dire calmement : « Tu as des preuves de ce que tu dis ? Inventer des mensonges sur quelqu\'un est méchant et interdit. »',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Éteignoir de Rumeur',
+            feedbackTitle: 'Réaction parfaite : exiger les faits !',
+            feedbackText: 'Les rumeurs s\'effondrent dès que quelqu\'un demande des preuves réelles. Tu bloques la transmission du mensonge.',
+            consequenceText: 'Léa bafouille et admet qu\'elle n\'a rien vu directement.'
+          },
+          {
+            id: 'm4-s1-repeat',
+            text: 'Aller répéter à tes copains : « Faites gaffe, Emma vole les feutres des autres ! »',
+            isBestChoice: false,
+            score: 0,
+            badgeTag: 'Colporteur de Mensonges',
+            feedbackTitle: 'Répéter sans preuve est un acte grave.',
+            feedbackText: 'En relayant une rumeur, tu participes activement à la destruction de la réputation d\'Emma.',
+            consequenceText: 'Toute la classe commence à se méfier d\'Emma.'
+          },
+          {
+            id: 'm4-s1-ignore',
+            text: 'Haussers les épaules en pensant que ce n\'est qu\'un bavardage sans importance.',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Sous-estimation',
+            feedbackTitle: 'Une rumeur n\'est jamais anodine.',
+            feedbackText: 'Un ragot répété 10 fois devient une vérité pour ceux qui l\'entendent.',
+            consequenceText: 'La rumeur fait le tour de l\'école en moins d\'une heure.'
+          }
         ]
       },
       {
-        id: 'c4-repeat',
-        text: 'Aller répéter l\'histoire à tes meilleurs amis en disant : « Attention, faites gaffe à vos trousses avec Emma ! »',
-        isBestChoice: false,
-        score: 0,
-        badgeTag: 'Vecteur de Rumeur',
-        feedbackTitle: 'Très néfaste ! Tu deviens le moteur du harcèlement !',
-        feedbackText: 'Colporter une rumeur sans preuve blesse profondément et détruit la réputation d\'une personne. Même si ce n\'est pas toi qui l\'as inventée, la relayer te rend co-responsable de sa souffrance.',
-        impactExplanation: 'Toute l\'école pointe Emma du doigt. Ses parents doivent venir la chercher car ses maux de ventre deviennent insupportables.',
-        distressCluesIdentified: [
-          'La rumeur est une forme d\'agression psychologique grave'
+        stepNumber: 2,
+        stepTitle: 'Étape 2 : L\'exclusion en classe',
+        location: 'Dans la classe de CM1',
+        storyText: `L'heure de géographie commence. Le maître demande aux élèves de se mettre par deux pour travailler sur une carte de France.
+Emma se tourne vers sa voisine habituelle qui recule brusquement sa chaise : « Non, je ne veux pas me mettre avec toi, tu touches pas à mes affaires ! ». Emma regarde autour d'elle : personne ne veut faire équipe avec elle. Elle se recroqueville, les bras croisés sur son ventre.`,
+        question: 'Emma est mise en quarantaine devant tout le monde. Que décides-tu ?',
+        choices: [
+          {
+            id: 'm4-s2-good',
+            text: 'Lever la main et dire joyeusement : « Emma, viens avec moi, on fait la carte ensemble ! »',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Partenaire Solidaire',
+            feedbackTitle: 'Geste d\'inclusion héroïque !',
+            feedbackText: 'Briser publiquement le boycott d\'une victime montre à toute la classe que le rejet est injustifié.',
+            consequenceText: 'Emma sourit avec soulagement et s\'installe à ta table avec enthousiasme.'
+          },
+          {
+            id: 'm4-s2-avoid',
+            text: 'Choisir vite un autre copain pour ne pas risquer d\'être associé à Emma.',
+            isBestChoice: false,
+            score: 1,
+            badgeTag: 'Peur du Regard des Autres',
+            feedbackTitle: 'Le conformisme isole la victime.',
+            feedbackText: 'Suivre le groupe par lâcheté valide la fausse rumeur.',
+            consequenceText: 'Emma reste seule à sa table et pleure discrètement sur son cahier.'
+          },
+          {
+            id: 'm4-s2-laugh',
+            text: 'Changer de trousse pour ne pas qu\'elle voie tes feutres.',
+            isBestChoice: false,
+            score: 0,
+            badgeTag: 'Humiliation Tacite',
+            feedbackTitle: 'Geste blessant qui valide le mensonge.',
+            feedbackText: 'Ce comportement renforce l\'idée injuste qu\'Emma est une voleuse.',
+            consequenceText: 'Emma se sent rejetée comme une coupable.'
+          }
         ]
       },
       {
-        id: 'c4-ignore',
-        text: 'Ne rien dire, mais changer de place pour ne pas risquer d\'être assis à côté d\'elle.',
-        isBestChoice: false,
-        score: 5,
-        badgeTag: 'Conformisme de Groupe',
-        feedbackTitle: 'Tu renforces son exclusion par peur des autres !',
-        feedbackText: 'Changer de place valide silencieusement la rumeur et envoie le message qu\'Emma est coupable. Pour être un ambassadeur, il faut le courage d\'agir selon son cœur et sa conscience.',
-        impactExplanation: 'Emma se retrouve complètement isolée dans un coin de la classe et perd l\'envie de travailler.',
-        distressCluesIdentified: [
-          'L\'exclusion spatiale est une douleur invisible très vive'
+        stepNumber: 3,
+        stepTitle: 'Étape 3 : Les signes corporels de souffrance',
+        location: 'La récréation de l\'après-midi',
+        storyText: `À la récréation, Emma ne sort pas jouer. Elle reste assise dans le couloir contre un radiateur, les genoux repliés contre sa poitrine, le visage pâle. Elle dit qu'elle a très mal au ventre et qu'elle a envie de vomir.
+Tu te rappelles que le stress intense et la tristesse se traduisent souvent par des maux de ventre (somatisation).`,
+        question: 'Tu vois Emma prostrée contre le radiateur. Quelle attention lui portes-tu ?',
+        choices: [
+          {
+            id: 'm4-s3-good',
+            text: 'T\'asseoir à sa hauteur, lui parler doucement : « Emma, je sais que cette histoire de feutres est fausse et méchante. Ton ventre te fait mal parce que tu as trop de chagrin. Veux-tu qu\'on aille à l\'infirmerie ensemble ? »',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Écoute Empathique',
+            feedbackTitle: 'Une compréhension profonde de la détresse !',
+            feedbackText: 'Mettre des mots sur l\'angoisse permet à la victime de décharger le poids physique de sa souffrance.',
+            consequenceText: 'Emma fond en larmes dans tes bras et te remercie de la croire.'
+          },
+          {
+            id: 'm4-s3-blame',
+            text: 'Lui dire : « Tu as mal au ventre parce que tu as trop mangé à midi ! »',
+            isBestChoice: false,
+            score: 1,
+            badgeTag: 'Incompréhension',
+            feedbackTitle: 'Ne nie pas la détresse émotionnelle.',
+            feedbackText: 'Les maux de ventre liés au harcèlement n\'ont rien à voir avec la digestion, ils sont le cri d\'un cœur blessé.',
+            consequenceText: 'Emma se sent incomprise et s\'isole encore plus.'
+          },
+          {
+            id: 'm4-s3-walk',
+            text: 'Passer devant elle en courant vers la cour pour ne pas perdre une minute de jeu.',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Indifférence',
+            feedbackTitle: 'Une minute pour un ami peut changer sa journée.',
+            feedbackText: 'Prendre un instant pour écouter est le devoir d\'une sentinelle.',
+            consequenceText: 'Emma reste seule dans le couloir désert.'
+          }
+        ]
+      },
+      {
+        stepNumber: 4,
+        stepTitle: 'Étape 4 : La vérité révélée à l\'enseignant',
+        location: 'Le bureau du maître',
+        storyText: `À l'infirmerie, Emma t'explique qu'elle a retrouvé les feutres pailletés de Léa : ils étaient simplement tombés derrière le casier du fond de la classe depuis mardi !
+Léa n'avait même pas vérifié et avait préféré accuser Emma pour se rendre intéressante auprès du groupe.`,
+        question: 'Maintenant que le mystère est résolu, comment rétablir la dignité d\'Emma ?',
+        choices: [
+          {
+            id: 'm4-s4-good',
+            text: 'Apporter les feutres retrouvés au maître avec Emma et expliquer calmement comment cette fausse accusation a fait souffrir Emma.',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Rétablisseur de Justice',
+            feedbackTitle: 'La vérité triomphe enfin au grand jour !',
+            feedbackText: 'Présenter la preuve matérielle au maître permet de rétablir solennellement l\'innocence d\'Emma.',
+            consequenceText: 'Le maître félicite votre démarche et décide d\'intervenir immédiatement auprès de la classe.'
+          },
+          {
+            id: 'm4-s4-hide',
+            text: 'Garder les feutres pour toi puisque personne ne savait où ils étaient.',
+            isBestChoice: false,
+            score: 0,
+            badgeTag: 'Malhonnêteté',
+            feedbackTitle: 'Inacceptable !',
+            feedbackText: 'Garder un objet perdu fait de toi un voleur et laisse Emma sous l\'accusation injuste.',
+            consequenceText: 'Le mensonge perdure et Emma reste soupçonnée.'
+          },
+          {
+            id: 'm4-s4-throw',
+            text: 'Jeter les feutres à la figure de Léa dans le couloir.',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Vengeance Agressive',
+            feedbackTitle: 'La violence gâche la victoire de la vérité.',
+            feedbackText: 'C\'est par le calme et les faits que l\'on désarme les calomniateurs.',
+            consequenceText: 'La dispute dégénère et vous êtes punis tous les deux.'
+          }
+        ]
+      },
+      {
+        stepNumber: 5,
+        stepTitle: 'Étape 5 : Les excuses et la Charte de classe',
+        location: 'La classe réunie en cercle',
+        storyText: `Le maître a réuni la classe en cercle de discussion. Léa, confuse et honteuse, s'est excusée publiquement devant Emma pour avoir colporté une accusation sans fondement.
+Le maître rappelle la règle essentielle : « Une rumeur fait autant de mal qu'un coup physique ».`,
+        question: 'Pour clore cette épreuve, quelle action scelle la réconciliation bienveillante ?',
+        choices: [
+          {
+            id: 'm4-s5-good',
+            text: 'Accepter avec Emma les excuses de Léa et inviter toute la classe à signer ensemble la Charte du Groupe Bouclier.',
+            isBestChoice: true,
+            score: 10,
+            badgeTag: 'Pacificateur d\'Honneur',
+            feedbackTitle: 'Pardon et union retrouvée !',
+            feedbackText: 'Savoir pardonner après la reconnaissance de la faute permet de reconstruire un groupe soudé et bienveillant.',
+            consequenceText: 'Emma n\'a plus jamais mal au ventre et retrouve toute sa joie d\'apprendre. Mission 4 terminée avec panache !'
+          },
+          {
+            id: 'm4-s5-reject',
+            text: 'Refuser les excuses et dire à tout le monde de ne plus jamais parler à Léa.',
+            isBestChoice: false,
+            score: 0,
+            badgeTag: 'Harcèlement Inversé',
+            feedbackTitle: 'Ne reproduis pas le harcèlement en sens inverse !',
+            feedbackText: 'Isoler Léa après ses excuses ferait d\'elle une nouvelle victime de harcèlement. L\'objectif est la réconciliation.',
+            consequenceText: 'Un nouveau cycle de rancœur commence dans la classe.'
+          },
+          {
+            id: 'm4-s5-leave',
+            text: 'Regarder par la fenêtre en attendant la fin de journée sans participer au cercle.',
+            isBestChoice: false,
+            score: 2,
+            badgeTag: 'Désintérêt',
+            feedbackTitle: 'Chaque voix compte dans la vie de la classe.',
+            feedbackText: 'S\'engager dans le groupe renforce la protection de tous.',
+            consequenceText: 'La charte est signée sans ta participation.'
+          }
         ]
       }
     ]

@@ -5,10 +5,10 @@ import { HeroSection } from './components/HeroSection';
 import { ScenarioGame } from './components/ScenarioGame';
 import { CriteriaDetector } from './components/CriteriaDetector';
 import { QuizSection } from './components/QuizSection';
-import { DiplomaSection } from './components/DiplomaSection';
 import { EmergencyHelpModal } from './components/EmergencyHelpModal';
 import { TeacherGuideModal } from './components/TeacherGuideModal';
-import { ShieldCheck, PhoneCall, BookOpen, AlertTriangle, RotateCcw } from 'lucide-react';
+import { PhoneCall, BookOpen, AlertTriangle, RotateCcw } from 'lucide-react';
+import shieldCrest from './assets/images/logo_groupe_bouclier_crest_1792243396239.jpg';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -45,7 +45,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
               Oups ! Un petit problème est survenu
             </h1>
             <p className="text-sm text-slate-600">
-              Pas d'inquiétude, clique sur le bouton ci-dessous pour recharger l'application Mission Bienveillance.
+              Clique sur le bouton ci-dessous pour recharger l'application Mission Bienveillance.
             </p>
             <button
               onClick={() => {
@@ -105,7 +105,7 @@ export default function App() {
     const rawHash = window.location.hash;
     if (rawHash && !rawHash.startsWith('#/')) {
       const cleanPath = rawHash.replace(/^#\/?/, '');
-      if (['jeu', 'detecteur', 'quiz', 'diplome'].includes(cleanPath)) {
+      if (['jeu', 'detecteur', 'quiz'].includes(cleanPath)) {
         navigate('/' + cleanPath, { replace: true });
       }
     }
@@ -188,7 +188,6 @@ export default function App() {
                   onStartGame={() => handleSelectTab('jeu')}
                   onOpenQuiz={() => handleSelectTab('quiz')}
                   onOpenDetector={() => handleSelectTab('detecteur')}
-                  onOpenDiploma={() => handleSelectTab('diplome')}
                   scenariosCompleted={completedScenarioIds.length}
                 />
               }
@@ -200,10 +199,10 @@ export default function App() {
                 <div className="space-y-6">
                   <div>
                     <h1 className="text-2xl sm:text-3xl font-black font-display text-slate-900">
-                      Mission Ambassadeur : Le Serious Game
+                      Missions Ambassadeur : Le Serious Game en 5 Étapes
                     </h1>
                     <p className="text-xs sm:text-sm text-slate-600 font-medium">
-                      Observe la situation, repère les indices de souffrance et choisis la réaction protectrice.
+                      Chaque situation se déroule en 5 étapes progressives : observation, indices de détresse, diagnostic VRI, choix d'action et bilan bienveillant.
                     </p>
                   </div>
 
@@ -223,18 +222,7 @@ export default function App() {
               element={
                 <QuizSection
                   onQuizCompleted={handleQuizCompleted}
-                  onGoToDiploma={() => handleSelectTab('diplome')}
-                />
-              }
-            />
-
-            <Route
-              path="/diplome"
-              element={
-                <DiplomaSection
-                  scenariosCompletedCount={completedScenarioIds.length}
-                  quizScorePercentage={quizScorePercentage}
-                  totalScore={totalScore}
+                  onGoToDiploma={() => handleSelectTab('jeu')}
                 />
               }
             />
@@ -248,13 +236,18 @@ export default function App() {
         <footer className="print:hidden bg-white border-t border-amber-200/80 py-8 text-xs text-slate-500">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
-                <ShieldCheck className="w-5 h-5" />
+              <div className="w-10 h-10 rounded-lg overflow-hidden border border-amber-300 shadow-xs bg-amber-50 shrink-0">
+                <img
+                  src={shieldCrest}
+                  alt="Blason Groupe Bouclier"
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
               </div>
               <div>
                 <span className="font-bold text-slate-800 text-sm">Mission Bienveillance · CM1 & CM2</span>
-                <p className="text-xs text-slate-500">
-                  Outil pédagogique interactif de sensibilisation et de prévention du harcèlement scolaire.
+                <p className="text-xs text-slate-500 font-semibold text-amber-800">
+                  Groupe Bouclier Notre Dame de la Tramontane
                 </p>
               </div>
             </div>

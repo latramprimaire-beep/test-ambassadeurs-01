@@ -1,12 +1,11 @@
 import React from 'react';
-import { Play, Sparkles, BookOpen, Compass, Award } from 'lucide-react';
-import heroImage from '../assets/images/hero_school_ambassadors_1792239396724.jpg';
+import { Play, Sparkles, Compass, CheckCircle2, ShieldCheck, Heart } from 'lucide-react';
+import heroImageFr from '../assets/images/hero_ambassadeurs_fr_1792242366727.jpg';
 
 interface HeroSectionProps {
   onStartGame: () => void;
   onOpenQuiz: () => void;
   onOpenDetector: () => void;
-  onOpenDiploma: () => void;
   scenariosCompleted: number;
 }
 
@@ -14,28 +13,27 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onStartGame,
   onOpenQuiz,
   onOpenDetector,
-  onOpenDiploma,
   scenariosCompleted
 }) => {
   return (
     <div className="space-y-8 sm:space-y-12">
-      {/* Hero Banner Grid */}
+      {/* Hero Banner with French illustration */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-400 via-orange-400 to-amber-500 text-white shadow-xl">
         <div className="grid lg:grid-cols-12 items-stretch min-h-[460px]">
-          {/* Left Column: Text & Primary Actions */}
+          {/* Left Column: Text & Actions */}
           <div className="lg:col-span-7 p-6 sm:p-10 lg:p-12 flex flex-col justify-between z-10">
             <div>
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-xs sm:text-sm font-semibold mb-5 shadow-xs">
                 <Sparkles className="w-4 h-4 text-amber-100" />
-                <span>Programme National de Prévention · Cycle 3 (CM1 & CM2)</span>
+                <span>Groupe Bouclier Notre Dame de la Tramontane · CM1 & CM2</span>
               </div>
 
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-display tracking-tight leading-tight text-white mb-4">
                 Deviens un Super Ambassadeur de la Bienveillance !
               </h1>
 
-              <p className="text-base sm:text-lg text-amber-50 leading-relaxed max-w-xl mb-8">
-                Dans la cour, à la cantine ou sur les écrans, apprends à repérer les situations de détresse, à briser le silence et à faire les bons choix pour protéger tes camarades d’école.
+              <p className="text-base sm:text-lg text-amber-50 leading-relaxed max-w-xl mb-8 font-medium">
+                Dans la cour, à la cantine ou sur les écrans, découvre nos missions interactives en <strong>5 étapes pédagogiques</strong> pour repérer la détresse, briser le silence et protéger tes camarades.
               </p>
             </div>
 
@@ -46,7 +44,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 className="flex items-center gap-3 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white text-base sm:text-lg font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer"
               >
                 <Play className="w-5 h-5 fill-current text-amber-400" />
-                <span>Lancer le Serious Game</span>
+                <span>Lancer les Missions (5 Étapes)</span>
               </button>
 
               <button
@@ -59,11 +57,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* Right Column: Hero Illustration */}
+          {/* Right Column: Hero Illustration in French */}
           <div className="lg:col-span-5 relative min-h-[280px] lg:min-h-full">
             <img
-              src={heroImage}
-              alt="Élèves ambassadeurs bienveillants dans la cour d'école"
+              src={heroImageFr}
+              alt="Enfants ambassadeurs avec banderole en français Ensemble contre le harcèlement"
               className="w-full h-full object-cover object-center lg:absolute lg:inset-0 rounded-b-3xl lg:rounded-b-none lg:rounded-r-3xl"
               referrerPolicy="no-referrer"
             />
@@ -82,14 +80,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             01
           </div>
           <h2 className="text-xl font-bold font-display text-slate-900 mb-2">
-            Missions & Choix Narratifs
+            Missions en 5 Étapes
           </h2>
           <p className="text-sm text-slate-600 leading-relaxed mb-4">
-            4 situations vécues dans le quotidien de l’école : la cour, la cantine, le groupe WhatsApp et le couloir. Décide de la bonne réaction !
+            Chaque situation se déroule en 5 étapes : Observation, Détection des indices, Diagnostic VRI, Choix d'action et Bilan bienveillant.
           </p>
           <div className="flex items-center justify-between text-xs font-semibold text-amber-700">
-            <span>{scenariosCompleted}/4 situations terminées</span>
-            <span className="group-hover:translate-x-1 transition-transform">Jouer &rarr;</span>
+            <span>{scenariosCompleted}/4 missions validées</span>
+            <span className="group-hover:translate-x-1 transition-transform">Commencer &rarr;</span>
           </div>
         </div>
 
@@ -107,7 +105,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             Est-ce une simple dispute ou du vrai harcèlement ? Vérifie en direct la formule <strong>V.R.I.</strong> (Violence, Répétition, Isolement).
           </p>
           <div className="flex items-center justify-between text-xs font-semibold text-emerald-700">
-            <span>Comprendre les critères</span>
+            <span>Tester les situations</span>
             <span className="group-hover:translate-x-1 transition-transform">Explorer &rarr;</span>
           </div>
         </div>
@@ -120,23 +118,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             03
           </div>
           <h2 className="text-xl font-bold font-display text-slate-900 mb-2">
-            Quiz & Diplôme Officiel
+            Quiz des Sentinelles
           </h2>
           <p className="text-sm text-slate-600 leading-relaxed mb-4">
-            8 défis interactifs pour tester tes connaissances, décrocher ton Brevet d’Ambassadeur personnalisé avec ton prénom et l'imprimer.
+            8 défis interactifs pour tester tes connaissances sur le rôle du témoin, le cyberharcèlement et le numéro d'urgence 3018.
           </p>
           <div className="flex items-center justify-between text-xs font-semibold text-indigo-700">
             <span>Valider ses acquis</span>
-            <span className="group-hover:translate-x-1 transition-transform">Commencer &rarr;</span>
+            <span className="group-hover:translate-x-1 transition-transform">Lancer le Quiz &rarr;</span>
           </div>
         </div>
       </div>
 
-      {/* Essential Key Knowledge Banner for CM1-CM2 */}
+      {/* Key fact banner */}
       <div className="bg-slate-900 rounded-2xl p-6 sm:p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-amber-400 text-slate-900 flex items-center justify-center font-black text-2xl shrink-0">
-            !
+            <Heart className="w-7 h-7 fill-slate-900" />
           </div>
           <div>
             <h3 className="text-lg font-bold font-display text-amber-300">
@@ -149,11 +147,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
         <div className="flex items-center gap-3 shrink-0">
           <button
-            onClick={onOpenDiploma}
+            onClick={onStartGame}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-sm transition-colors cursor-pointer"
           >
-            <Award className="w-4 h-4" />
-            <span>Voir mon Brevet</span>
+            <ShieldCheck className="w-4 h-4" />
+            <span>Rejoindre la mission</span>
           </button>
         </div>
       </div>

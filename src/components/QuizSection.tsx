@@ -221,7 +221,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
               className="flex items-center gap-2 px-7 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-black text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer"
             >
               <Award className="w-5 h-5" />
-              <span>Découvrir mon Brevet d'Ambassadeur &rarr;</span>
+              <span>Lancer les Missions (5 Étapes) &rarr;</span>
             </button>
           </div>
         </div>
