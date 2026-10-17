@@ -3,7 +3,7 @@ import type { QuizQuestion } from '../utils/gameLogic';
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
     id: 'q1',
-    question: 'Quels sont les 3 critères obligatoires pour parler de harcèlement scolaire ?',
+    question: 'Quels sont les 3 critères obligatoires pour parler de harcèlement scolaire?',
     options: [
       'La violence (physique ou verbale), la répétition et l\'isolement de la victime',
       'Une simple dispute entre deux copains pendant une partie de billes',
