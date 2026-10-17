@@ -30,7 +30,7 @@ jobs:
           node-version: 20
 
       - name: Installer les dépendances
-        run: npm install
+        run: npm install --no-frozen-lockfile --legacy-peer-deps
 
       - name: Compiler le projet pour production (Vite)
         run: npm run build
