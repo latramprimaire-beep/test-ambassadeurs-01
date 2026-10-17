@@ -1,0 +1,6 @@
+{
+  "name": "Mission Bienveillance - Ambassadeurs CM1/CM2",
+  "description": "Serious game interactif et quiz de sensibilisation au harcèlement scolaire pour les élèves de CM1 et CM2. Détectez les situations de détresse et devenez Ambassadeur de la Bienveillance !",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
