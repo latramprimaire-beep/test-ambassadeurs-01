@@ -9,17 +9,34 @@ interface QuizSectionProps {
   onGoToDiploma: () => void;
 }
 
+function randomizeQuiz(questions: typeof QUIZ_QUESTIONS) {
+  return questions.map(q => {
+    const paired = q.options.map((opt, idx) => ({ opt, isCorrect: idx === q.correctIndex }));
+    for (let i = paired.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [paired[i], paired[j]] = [paired[j], paired[i]];
+    }
+    const newCorrectIndex = paired.findIndex(p => p.isCorrect);
+    return {
+      ...q,
+      options: paired.map(p => p.opt),
+      correctIndex: newCorrectIndex
+    };
+  });
+}
+
 export const QuizSection: React.FC<QuizSectionProps> = ({
   onQuizCompleted,
   onGoToDiploma
 }) => {
+  const [shuffledQuestions, setShuffledQuestions] = useState(() => randomizeQuiz(QUIZ_QUESTIONS));
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
 
-  const question = QUIZ_QUESTIONS[currentQuestionIndex];
+  const question = shuffledQuestions[currentQuestionIndex];
   const isCorrect = selectedOption === question.correctIndex;
 
   const handleSelectOption = (idx: number) => {
@@ -40,12 +57,12 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
 
   const handleNextQuestion = () => {
     playChoiceClick();
-    if (currentQuestionIndex < QUIZ_QUESTIONS.length - 1) {
+    if (currentQuestionIndex < shuffledQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
       setIsAnswerSubmitted(false);
     } else {
-      const result = evaluateQuizAnswers(answers, QUIZ_QUESTIONS);
+      const result = evaluateQuizAnswers(answers, shuffledQuestions);
       onQuizCompleted(result.percentage);
       setIsFinished(true);
     }
@@ -53,6 +70,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
 
   const handleRestartQuiz = () => {
     playChoiceClick();
+    setShuffledQuestions(randomizeQuiz(QUIZ_QUESTIONS));
     setAnswers({});
     setCurrentQuestionIndex(0);
     setSelectedOption(null);
@@ -60,7 +78,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
     setIsFinished(false);
   };
 
-  const quizResult = evaluateQuizAnswers(answers, QUIZ_QUESTIONS);
+  const quizResult = evaluateQuizAnswers(answers, shuffledQuestions);
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -221,7 +239,8 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
               className="flex items-center gap-2 px-7 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-black text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer"
             >
               <Award className="w-5 h-5" />
-              <span>Lancer les Missions (5 Étapes) &rarr;</span>
+              <span>Lancer les Missions (5 Étapes)</span>
+              <ArrowRight className="w-5 h-5" />
             </button>
           </div>
         </div>

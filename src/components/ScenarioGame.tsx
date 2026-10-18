@@ -21,6 +21,15 @@ interface ScenarioGameProps {
   onFinishAll: () => void;
 }
 
+function shuffleChoices(choices: StoryChoice[]): StoryChoice[] {
+  const shuffled = [...choices];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 export const ScenarioGame: React.FC<ScenarioGameProps> = ({
   onScenarioCompleted,
   completedScenarioIds,
@@ -32,8 +41,21 @@ export const ScenarioGame: React.FC<ScenarioGameProps> = ({
   const [selectedChoiceForCurrentStep, setSelectedChoiceForCurrentStep] = useState<StoryChoice | null>(null);
   const [isMissionFinished, setIsMissionFinished] = useState(false);
 
+  // Pre-randomize all choices so the best response is never predictably first
+  const [shuffledChoicesMap, setShuffledChoicesMap] = useState<Record<string, StoryChoice[]>>(() => {
+    const map: Record<string, StoryChoice[]> = {};
+    STORY_MISSIONS.forEach(m => {
+      m.steps.forEach(s => {
+        map[`${m.id}-${s.stepNumber}`] = shuffleChoices(s.choices);
+      });
+    });
+    return map;
+  });
+
   const mission: StoryMission = STORY_MISSIONS[currentMissionIndex];
   const currentStep: StoryStep = mission.steps[currentStepNumber - 1];
+  const currentStepKey = `${mission.id}-${currentStepNumber}`;
+  const displayedChoices = shuffledChoicesMap[currentStepKey] || currentStep.choices;
 
   const handleSelectChoice = (choice: StoryChoice) => {
     playChoiceClick();
@@ -90,6 +112,14 @@ export const ScenarioGame: React.FC<ScenarioGameProps> = ({
 
   const handleRestartMission = () => {
     playChoiceClick();
+    // Freshly re-randomize choices for this mission on restart
+    setShuffledChoicesMap(prev => {
+      const nextMap = { ...prev };
+      mission.steps.forEach(s => {
+        nextMap[`${mission.id}-${s.stepNumber}`] = shuffleChoices(s.choices);
+      });
+      return nextMap;
+    });
     setCurrentStepNumber(1);
     setStepChoices({});
     setSelectedChoiceForCurrentStep(null);
@@ -238,10 +268,10 @@ export const ScenarioGame: React.FC<ScenarioGameProps> = ({
                   <span>{currentStep.question}</span>
                 </h3>
 
-                {/* 3 Narrative Action Choices */}
+                {/* 3 Narrative Action Choices with Randomized Order */}
                 {!selectedChoiceForCurrentStep ? (
                   <div className="space-y-3">
-                    {currentStep.choices.map((choice, idx) => (
+                    {displayedChoices.map((choice, idx) => (
                       <button
                         key={choice.id}
                         onClick={() => handleSelectChoice(choice)}
@@ -386,13 +416,14 @@ export const ScenarioGame: React.FC<ScenarioGameProps> = ({
 
             <button
               onClick={handleNextMission}
-              className="flex items-center gap-2 px-7 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer"
+              className="flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer"
             >
               <span>
                 {currentMissionIndex < STORY_MISSIONS.length - 1
-                  ? 'Passer à l\'histoire suivante &rarr;'
-                  : 'Terminer toutes les histoires &rarr;'}
+                  ? "Passer à l'histoire suivante"
+                  : 'Terminer toutes les histoires'}
               </span>
+              <ArrowRight className="w-5 h-5 text-amber-400 shrink-0" />
             </button>
           </div>
         </div>

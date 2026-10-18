@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Sparkles, Compass, CheckCircle2, ShieldCheck, Heart } from 'lucide-react';
+import { Play, Sparkles, Compass, CheckCircle2, ShieldCheck, Heart, ArrowRight } from 'lucide-react';
 import heroImageFr from '../assets/images/hero_ambassadeurs_fr_1792242366727.jpg';
 
 interface HeroSectionProps {
@@ -87,7 +87,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </p>
           <div className="flex items-center justify-between text-xs font-semibold text-amber-700">
             <span>{scenariosCompleted}/4 missions validées</span>
-            <span className="group-hover:translate-x-1 transition-transform">Commencer &rarr;</span>
+            <span className="inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+              <span>Commencer</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </span>
           </div>
         </div>
 
@@ -106,7 +109,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </p>
           <div className="flex items-center justify-between text-xs font-semibold text-emerald-700">
             <span>Tester les situations</span>
-            <span className="group-hover:translate-x-1 transition-transform">Explorer &rarr;</span>
+            <span className="inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+              <span>Explorer</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </span>
           </div>
         </div>
 
@@ -125,7 +131,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </p>
           <div className="flex items-center justify-between text-xs font-semibold text-indigo-700">
             <span>Valider ses acquis</span>
-            <span className="group-hover:translate-x-1 transition-transform">Lancer le Quiz &rarr;</span>
+            <span className="inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+              <span>Lancer le Quiz</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </span>
           </div>
         </div>
       </div>

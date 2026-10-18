@@ -1,6 +1,5 @@
 import React from 'react';
-import { X, BookOpen, Heart, CheckSquare, Printer } from 'lucide-react';
-import { playChoiceClick } from '../utils/soundEffects';
+import { X, BookOpen, Heart, CheckSquare } from 'lucide-react';
 
 interface TeacherGuideModalProps {
   isOpen: boolean;
@@ -9,11 +8,6 @@ interface TeacherGuideModalProps {
 
 export const TeacherGuideModal: React.FC<TeacherGuideModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
-
-  const handlePrintPledge = () => {
-    playChoiceClick();
-    window.print();
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
@@ -74,9 +68,9 @@ export const TeacherGuideModal: React.FC<TeacherGuideModalProps> = ({ isOpen, on
             </div>
 
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-              <span className="font-bold text-amber-700 block mb-1">Étape 4 · Brevet & Signature (10 min)</span>
+              <span className="font-bold text-amber-700 block mb-1">Étape 4 · Charte & Signature (10 min)</span>
               <p className="text-slate-600">
-                Imprimer les brevets individuels ou signer solennellement la Charte de la classe ci-dessous.
+                Débattre ensemble et signer collectivement la Charte de la classe bienveillante ci-dessous.
               </p>
             </div>
           </div>
@@ -84,20 +78,11 @@ export const TeacherGuideModal: React.FC<TeacherGuideModalProps> = ({ isOpen, on
 
         {/* Charte de la Classe Bienveillante */}
         <div className="bg-amber-50/70 rounded-2xl p-6 border-2 border-amber-300 text-slate-800 space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
-              <h4 className="text-lg font-black font-display text-slate-900">
-                Charte de notre Classe Bienveillante
-              </h4>
-            </div>
-            <button
-              onClick={handlePrintPledge}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-white border border-amber-300 hover:bg-amber-100 text-amber-900 shadow-xs cursor-pointer"
-            >
-              <Printer className="w-3.5 h-3.5" />
-              <span>Imprimer la charte</span>
-            </button>
+          <div className="flex items-center gap-2">
+            <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
+            <h4 className="text-lg font-black font-display text-slate-900">
+              Charte de notre Classe Bienveillante
+            </h4>
           </div>
 
           <div className="space-y-2 text-xs sm:text-sm font-medium">
