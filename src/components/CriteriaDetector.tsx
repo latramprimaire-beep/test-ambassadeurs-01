@@ -85,7 +85,7 @@ export const CriteriaDetector: React.FC = () => {
           </div>
           <div>
             <h2 className="text-2xl font-black font-display text-slate-900">
-              Le Détecteur des 3 Piliers (V.R.I.)
+              Le Détecteur des 3 Piliers (VRI)
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 font-medium">
               Comment faire la différence entre une simple dispute et du harcèlement scolaire ?
@@ -250,11 +250,14 @@ export const CriteriaDetector: React.FC = () => {
         {result.missingCriteria.length > 0 && (
           <div className="bg-white/80 rounded-xl p-4 border border-slate-200/60 text-xs sm:text-sm">
             <span className="font-bold text-slate-800">Critères manquants pour qualifier un harcèlement :</span>
-            <ul className="list-disc list-inside mt-1.5 space-y-1 text-slate-600">
+            <div className="mt-2 space-y-1.5 text-slate-600">
               {result.missingCriteria.map((c, idx) => (
-                <li key={idx}>{c}</li>
+                <div key={idx} className="flex items-center gap-2">
+                  <span className="text-amber-600 font-bold">—</span>
+                  <span>{c}</span>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         )}
       </div>
@@ -268,20 +271,22 @@ export const CriteriaDetector: React.FC = () => {
           </h3>
         </div>
 
-        <div className="grid sm:grid-cols-3 gap-3">
+        <div className="grid sm:grid-cols-3 gap-4">
           {PRESET_SITUATIONS.map((preset) => (
             <button
               key={preset.id}
               onClick={() => applyPreset(preset)}
-              className="p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-amber-50/70 hover:border-amber-300 text-left transition-all cursor-pointer group"
+              className="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-amber-50/70 hover:border-amber-300 text-left transition-all cursor-pointer group flex flex-col justify-between"
             >
-              <h4 className="font-bold text-sm text-slate-900 mb-1 group-hover:text-amber-800">
-                {preset.title}
-              </h4>
-              <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
-                {preset.description}
-              </p>
-              <div className="mt-3 flex items-center gap-1 text-xs font-semibold text-amber-600">
+              <div>
+                <h4 className="font-bold text-sm sm:text-base text-slate-900 mb-2 group-hover:text-amber-800">
+                  {preset.title}
+                </h4>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {preset.description}
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-slate-200/60 flex items-center gap-1.5 text-xs font-bold text-amber-600">
                 <span>Tester ce cas</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </div>

@@ -192,7 +192,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
                   className="flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm sm:text-base shadow-md cursor-pointer"
                 >
                   <span>
-                    {currentQuestionIndex < QUIZ_QUESTIONS.length - 1 ? 'Question suivante' : 'Voir mon score'}
+                    {currentQuestionIndex < QUIZ_QUESTIONS.length - 1 ? 'Question suivante' : 'Voir mon bilan'}
                   </span>
                   <ArrowRight className="w-4 h-4" />
                 </button>

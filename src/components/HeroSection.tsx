@@ -105,7 +105,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             Le Détecteur des 3 Piliers
           </h2>
           <p className="text-sm text-slate-600 leading-relaxed mb-4">
-            Est-ce une simple dispute ou du vrai harcèlement ? Vérifie en direct la formule <strong>V.R.I.</strong> (Violence, Répétition, Isolement).
+            Est-ce une simple dispute ou du vrai harcèlement ? Vérifie en direct la formule <strong>VRI</strong> (Violence, Répétition, Isolement).
           </p>
           <div className="flex items-center justify-between text-xs font-semibold text-emerald-700">
             <span>Tester les situations</span>

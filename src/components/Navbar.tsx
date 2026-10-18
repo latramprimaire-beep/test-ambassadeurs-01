@@ -1,5 +1,5 @@
 import React from 'react';
-import { PhoneCall, HeartHandshake, HelpCircle } from 'lucide-react';
+import { PhoneCall, HelpCircle } from 'lucide-react';
 import shieldCrest from '../assets/images/logo_groupe_bouclier_crest_1792243396239.jpg';
 
 interface NavbarProps {
@@ -95,14 +95,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </nav>
 
-          {/* Zone 3: Primary action button & Score Badge */}
+          {/* Zone 3: Primary action button */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {totalScore > 0 && (
-              <div className="hidden sm:flex items-center gap-1 px-3 py-1 bg-amber-100 text-amber-900 text-xs font-semibold rounded-lg">
-                <HeartHandshake className="w-3.5 h-3.5 text-amber-600" />
-                <span className="tabular-nums">{totalScore}</span> pts
-              </div>
-            )}
             <button
               onClick={onOpenEmergency}
               className="flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs transition-colors whitespace-nowrap cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-rose-500"

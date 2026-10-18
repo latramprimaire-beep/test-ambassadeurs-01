@@ -309,10 +309,16 @@ export const ScenarioGame: React.FC<ScenarioGameProps> = ({
                             {selectedChoiceForCurrentStep.feedbackTitle}
                           </span>
                         </div>
-                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 shadow-xs font-bold text-xs sm:text-sm">
-                          <Star className="w-4 h-4 fill-amber-400 text-amber-500" />
-                          <span>+{selectedChoiceForCurrentStep.score} points</span>
-                        </div>
+                        {selectedChoiceForCurrentStep.isBestChoice ? (
+                          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 shadow-xs font-bold text-xs sm:text-sm">
+                            <Sparkles className="w-4 h-4 text-emerald-600" />
+                            <span>Choix bienveillant</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 shadow-xs font-bold text-xs sm:text-sm">
+                            <span>Choix à améliorer</span>
+                          </div>
+                        )}
                       </div>
 
                       <p className="text-sm sm:text-base leading-relaxed mb-4 font-medium">
@@ -396,12 +402,6 @@ export const ScenarioGame: React.FC<ScenarioGameProps> = ({
             <p className="text-base sm:text-lg font-bold font-display leading-snug">
               {mission.goldenRule}
             </p>
-          </div>
-
-          {/* Points earned */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 font-bold text-sm">
-            <Star className="w-4 h-4 text-amber-500 fill-amber-400" />
-            <span>Score obtenu sur cette histoire : {totalPointsInMission} / 50 points</span>
           </div>
 
           {/* CTAs */}
